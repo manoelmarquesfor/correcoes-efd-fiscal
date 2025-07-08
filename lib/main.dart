@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:correcoes_efd_fiscal/home_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:window_size/window_size.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux) {
+    setWindowMaxSize(const Size(800, 600));
+  }
   runApp(const MyApp());
 }
 
