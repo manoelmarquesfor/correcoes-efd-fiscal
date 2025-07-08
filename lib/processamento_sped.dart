@@ -93,7 +93,7 @@ class ProcessamentoSped {
     }
   }
 
-  void gerarSped() {
+  Future<void> gerarSped() async {
     if (novoSped.isEmpty) {
       throw FormatException('Nenhum dado processado para gerar o SPED.');
     }

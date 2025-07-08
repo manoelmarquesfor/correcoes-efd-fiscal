@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
 
                               await processamentoSped.lerSped();
 
-                              processamentoSped.gerarSped();
+                              await processamentoSped.gerarSped();
 
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
