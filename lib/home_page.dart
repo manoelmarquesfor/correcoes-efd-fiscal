@@ -156,45 +156,7 @@ class _HomePageState extends State<HomePage> {
                             (!_correcaoUnidadeMedida && !_correcaoCodigoPais)
                         ? null
                         : () async {
-                            try {
-                              Loader.show(context);
-
-                              final processamentoSped = ProcessamentoSped(
-                                _file!.path,
-                                _file!.name,
-                                _correcaoCodigoPais,
-                                _correcaoUnidadeMedida,
-                              );
-
-                              await processamentoSped.lerSped();
-
-                              await processamentoSped.gerarSped();
-
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Arquivo ${_file!.name} processado com sucesso!',
-                                    ),
-                                    duration: const Duration(seconds: 10),
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Erro ao processar o arquivo: $e',
-                                    ),
-                                    backgroundColor: Colors.red,
-                                    duration: const Duration(seconds: 20),
-                                  ),
-                                );
-                              }
-                            } finally {
-                              Loader.hide();
-                            }
+                            await processarSped(context);
                           },
                   ),
                 ],
@@ -204,6 +166,50 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> processarSped(BuildContext context) async {
+    try {
+      Loader.show(context);
+
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final processamentoSped = ProcessamentoSped(
+        _file!.path,
+        _file!.name,
+        _correcaoCodigoPais,
+        _correcaoUnidadeMedida,
+      );
+
+      await processamentoSped.lerSped();
+
+      await processamentoSped.gerarSped();
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Arquivo ${_file!.name} processado com sucesso!',
+            ),
+            duration: const Duration(seconds: 10),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erro ao processar o arquivo: $e',
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 20),
+          ),
+        );
+      }
+    } finally {
+      Loader.hide();
+    }
   }
 
   Future<XFile?> _openSpedFile(BuildContext context) async {
