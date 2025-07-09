@@ -172,8 +172,6 @@ class _HomePageState extends State<HomePage> {
     try {
       Loader.show(context);
 
-      await Future.delayed(const Duration(milliseconds: 100));
-
       final processamentoSped = ProcessamentoSped(
         _file!.path,
         _file!.name,
@@ -191,7 +189,8 @@ class _HomePageState extends State<HomePage> {
             content: Text(
               'Arquivo ${_file!.name} processado com sucesso!',
             ),
-            duration: const Duration(seconds: 10),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 20),
           ),
         );
       }
