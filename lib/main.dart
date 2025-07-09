@@ -8,7 +8,10 @@ import 'package:window_size/window_size.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux) {
-    setWindowMaxSize(const Size(800, 600));
+    const size = Size(800, 700);
+    setWindowMinSize(size);
+    setWindowMaxSize(size);
+    setWindowFrame(Rect.fromLTWH(100, 100, size.width, size.height));
   }
   runApp(const MyApp());
 }
