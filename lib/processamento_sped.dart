@@ -10,6 +10,7 @@ class ProcessamentoSped {
   final List<String> novoSped;
 
   static const String _codPaisBrasil = '1058';
+  static const Encoding encoding = Latin1Codec();
 
   final Map<String, String> _unidadesMedida;
 
@@ -20,11 +21,13 @@ class ProcessamentoSped {
 
   Future<void> lerSped() async {
     final file = File(filePath);
-    if (!file.existsSync()) {
+
+    final fileExists = await file.exists();
+    if (!fileExists) {
       throw FileSystemException('Arquivo não encontrado: $filePath');
     }
 
-    final sped = await file.readAsLines(encoding: latin1);
+    final sped = await file.readAsLines(encoding: encoding);
     for (final line in sped) {
       final linha = line.split('|');
 
@@ -101,15 +104,19 @@ class ProcessamentoSped {
     final file = File(filePath);
 
     // Remove o arquivo antigo
-    if (file.existsSync()) {
-      file.deleteSync();
+    if (await file.exists()) {
+      await file.delete();
     }
 
+    IOSink fileSink = file.openWrite(
+      mode: FileMode.writeOnly,
+      encoding: encoding,
+    );
+
     for (final linha in novoSped) {
-      file.writeAsBytesSync(
-        '$linha\n'.codeUnits,
-        mode: FileMode.append,
-      );
+      fileSink.writeln(linha);
     }
+
+    await fileSink.close();
   }
 }
